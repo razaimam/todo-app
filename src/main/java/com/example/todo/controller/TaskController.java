@@ -15,6 +15,7 @@ import java.util.List;
 
 @Api(tags = "Todo", value = "Todo")
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("api/v1/todo")
 public class TaskController {
 
@@ -22,7 +23,10 @@ public class TaskController {
     private TaskService taskService;
 
     @ApiOperation(value = "Get all tasks", response = Task.class, responseContainer = "Array")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "Internal server Error"),
+    })
     @GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Task>> getAll() {
         List<Task> tasks = taskService.getAll();
@@ -52,7 +56,7 @@ public class TaskController {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(task);
     }
 
-    @ApiOperation(value = "Update task", response = Task.class)
+    @ApiOperation(value = "Delete task", response = Task.class)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
     @DeleteMapping(value = "/deleteTask/{taskId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Task> deleteTask(@PathVariable Integer taskId) {
